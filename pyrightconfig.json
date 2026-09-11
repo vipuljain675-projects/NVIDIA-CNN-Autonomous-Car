@@ -1,0 +1,21 @@
+{
+    "venvPath": ".",
+    "venv": "venv",
+    "pythonVersion": "3.11",
+    "pythonPlatform": "Darwin",
+    "include": [
+        "."
+    ],
+    "exclude": [
+        "**/node_modules",
+        "**/__pycache__",
+        "venv"
+    ],
+    "typeCheckingMode": "off",
+    "reportMissingImports": "none",
+    "reportOptionalCall": "none",
+    "reportPossiblyUnboundVariable": "none",
+    "reportOptionalIterable": "none",
+    "reportOptionalMemberAccess": "none",
+    "reportAttributeAccessIssue": "none"
+}

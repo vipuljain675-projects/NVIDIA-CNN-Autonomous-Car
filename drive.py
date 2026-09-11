@@ -1,16 +1,19 @@
 import base64
 from io import BytesIO
+from typing import Any
 import cv2
 import eventlet  # type: ignore
+import eventlet.wsgi  # type: ignore
 from flask import Flask
 import numpy as np
 from PIL import Image
-import socketio
+import socketio  # type: ignore
 from tensorflow.keras.models import load_model  # type: ignore
 
 sio = socketio.Server()
 app = Flask(__name__)
 speed_limit = 20
+model: Any = None
 
 
 def img_preprocess(img):
@@ -22,7 +25,7 @@ def img_preprocess(img):
     return img
 
 
-@sio.on('telemetry')
+@sio.on('telemetry')  # type: ignore
 def telemetry(sid, data):
     speed = float(data['speed'])
     image = Image.open(BytesIO(base64.b64decode(data['image'])))
@@ -35,7 +38,7 @@ def telemetry(sid, data):
     send_control(steering_angle, throttle)
 
 
-@sio.on('connect')
+@sio.on('connect')  # type: ignore
 def connect(sid, environ):
     print('Connected')
     send_control(0, 0)
@@ -50,5 +53,6 @@ def send_control(steering_angle, throttle):
 
 if __name__ == '__main__':
     model = load_model('./model.h5', compile=False)
-    app = socketio.Middleware(sio, app)
-    eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+    app = socketio.Middleware(sio, app)  # type: ignore
+    eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
+

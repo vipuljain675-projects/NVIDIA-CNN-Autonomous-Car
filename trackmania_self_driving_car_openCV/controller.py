@@ -19,7 +19,6 @@ def drive(P, N):
     j = 0.001
     slp = 0.045
     slp1 = 0.09
-    slp2 = 0.01
     slp3 = 0.2
     if (round(abs(P/N), 3) in frange(0.201, 1.5, j)) or (round(abs(N/P), 3) in frange(0.6, 1.5, j)):
         keyboard.press('w')

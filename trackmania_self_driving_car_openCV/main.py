@@ -1,15 +1,15 @@
+import time
+from statistics import StatisticsError, mean
 import cv2
 import numpy as np
-import time
-from statistics import mean
+
 try:
     from grab_screen import grab  # type: ignore
     from controller import drive  # type: ignore
 except ImportError:
     from trackmania_self_driving_car_openCV.grab_screen import grab  # type: ignore
     from trackmania_self_driving_car_openCV.controller import drive  # type: ignore
-from statistics import StatisticsError
-import keyboard  # type: ignore
+
 
 def process_frame(frame):
     frame = cv2.resize(frame, (640, 360))
@@ -21,21 +21,22 @@ def process_frame(frame):
     frame = roi(frame, [pts])
     lines = cv2.HoughLinesP(frame, 1, np.pi/180, 50, np.array([]), 10, 20)
     slopes = []
-    for line in lines:
-        xy = line[0]
-        slopes.append((xy[3]-xy[1])/(xy[2]-xy[0]))
-        cv2.line(frame2, (xy[0], xy[1]), (xy[2], xy[3]), [255, 0, 0], 4)
+    if lines is not None:
+        for line in lines:
+            xy = line[0]
+            slopes.append((xy[3]-xy[1])/(xy[2]-xy[0]))
+            cv2.line(frame2, (xy[0], xy[1]), (xy[2], xy[3]), [255, 0, 0], 4)
 
-    pslope = [i for i in slopes if i>=0]
-    nslope = [i for i in slopes if i<0]
+    pslope = [i for i in slopes if i >= 0]
+    nslope = [i for i in slopes if i < 0]
     try:
-        mean_pslope = round(mean(pslope), 3)
-    except StatisticsError:
+        mean_pslope = round(mean(pslope), 3) if pslope else 0.0
+    except (StatisticsError, ValueError):
         mean_pslope = 0.0
 
     try:
-        mean_nslope = round(mean(nslope), 3)
-    except StatisticsError:
+        mean_nslope = round(mean(nslope), 3) if nslope else 0.0
+    except (StatisticsError, ValueError):
         mean_nslope = 0.0
     return frame2, mean_pslope, mean_nslope
 

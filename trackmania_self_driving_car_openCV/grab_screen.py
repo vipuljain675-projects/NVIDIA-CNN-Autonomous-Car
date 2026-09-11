@@ -1,10 +1,15 @@
 import cv2
 import numpy as np
 
+win32gui = win32ui = win32con = win32api = None
+
 try:
-    import win32gui, win32ui, win32con, win32api  # type: ignore # noqa: F401
+    import win32gui  # type: ignore # noqa: F401
+    import win32ui  # type: ignore # noqa: F401
+    import win32con  # type: ignore # noqa: F401
+    import win32api  # type: ignore # noqa: F401
     IS_WINDOWS = True
-except ImportError:
+except (ImportError, ModuleNotFoundError):
     IS_WINDOWS = False
     try:
         from PIL import ImageGrab
