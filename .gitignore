@@ -1,0 +1,25 @@
+# Python virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Model (large file - add separately)
+# model.h5
+
+# Dataset images (too large for GitHub)
+IMG/
+
+# OS files
+.DS_Store
+*.DS_Store
+
+# VS Code
+.vscode/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
