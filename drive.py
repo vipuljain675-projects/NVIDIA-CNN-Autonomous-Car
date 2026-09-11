@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model  # type: ignore
 
 sio = socketio.Server()
 app = Flask(__name__)
-speed_limit = 20
+speed_limit = 90
 model: Any = None
 
 
