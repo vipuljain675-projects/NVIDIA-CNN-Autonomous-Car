@@ -23,3 +23,4 @@ IMG/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
+venv
