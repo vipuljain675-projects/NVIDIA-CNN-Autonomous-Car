@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model  # type: ignore
 
 sio = socketio.Server()
 app = Flask(__name__)
-speed_limit = 90
+speed_limit = 40
 model: Any = None
 
 
@@ -33,8 +33,11 @@ def telemetry(sid, data):
     image = img_preprocess(image)
     image = np.array([image])
     steering_angle = float(model.predict(image, verbose=0)[0][0])
+    # Speed badhne par steering dampen karo (high speed pe stability ke liye)
+    damping = 1.0 - 0.5 * (speed / speed_limit)  # 25mph pe 0.75x, 40mph pe 0.5x
+    steering_angle = steering_angle * damping
     throttle = 1.0 - speed / speed_limit
-    print(f'{steering_angle} {throttle} {speed}')
+    print(f'{steering_angle:.3f} {throttle:.3f} {speed:.1f}')
     send_control(steering_angle, throttle)
 
 
@@ -55,4 +58,4 @@ if __name__ == '__main__':
     model = load_model('./model.h5', compile=False)
     app = socketio.Middleware(sio, app)  # type: ignore
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
-
+
